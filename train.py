@@ -60,6 +60,8 @@ def train():
             sum_loss += float(loss.data) * batchsize
             sum_accuracy += float(model.accuracy.data) * batchsize
         print "test loss={0}, accuracy={1}".format(sum_loss/N_test, sum_accuracy/N_test)
+
+    serializers.save_npz("animeface.model", model)
         
 
 def main():
