@@ -9,12 +9,31 @@ I refered [深層学習でアニメ顔を分類する](http://qiita.com/hogefuga
 
 ## Demo
 
-## Requirement
-
 ## Usage
 
-## Install
-We can build docker image from Dockerfile.
+### Training
+Build Dockerfile.
+
+```
+docker build -t <image_name> .
+```
+
+Run training.
+
+```
+docker run <image_name>
+```
+
+Then `/animeface/animeface.model` will be created in container.
+
+### Recognition
+Run command in container.
+
+```
+python recognize.py <path_to_image_file>
+```
+
+`animeface.model` is necessary to recognize.
 
 ## Author
 
