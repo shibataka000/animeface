@@ -13,7 +13,7 @@ import net
 
 
 batchsize = 100
-n_epoch = 2
+n_epoch = 100
 train_rate = 0.8
 
 
