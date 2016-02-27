@@ -47,5 +47,5 @@ def load_dataset():
 def get_class_id_table():
     tags = os.listdir(DATASET_DIR)
     tags = sorted(tags)
-    tag2id = {tags[i]:i for i in range(len(tags))}
+    tag2id = {tags[i]: i for i in range(len(tags))}
     return tag2id
