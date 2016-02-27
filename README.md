@@ -34,6 +34,7 @@ python recognize.py <path_to_image_file>
 ```
 
 `animeface.model` is necessary to recognize.
+Recognized image must be in container.
 
 ## Author
 
