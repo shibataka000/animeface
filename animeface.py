@@ -21,8 +21,7 @@ def load_image(path):
 
 
 def load_dataset():
-    data = []
-    target = []
+    dataset = []
     tag2id = get_class_id_table()
 
     for dir_name in os.listdir(DATASET_DIR):
@@ -35,11 +34,11 @@ def load_dataset():
                 continue
             file_path = os.path.join(dir_path, file_name)
             image = load_image(file_path)
-            data.append(image)
-            target.append(class_id)
+            dataset.append((image, class_id))
 
-    data = np.array(data, np.float32)
-    target = np.array(target, np.int32)
+    random.shuffle(dataset)
+    data = np.array([x[0] for x in dataset], np.float32)
+    target = np.array([x[1] for x in dataset], np.int32)
 
     return (data, target)
 
