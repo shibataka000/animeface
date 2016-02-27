@@ -14,7 +14,7 @@ I refered [深層学習でアニメ顔を分類する](http://qiita.com/hogefuga
 ## Usage
 
 ## Install
-You can build docker image from Dockerfile.
+We can build docker image from Dockerfile.
 
 ## Author
 
