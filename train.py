@@ -12,20 +12,24 @@ import animeface
 import net
 
 
+batchsize = 100
+n_epoch = 2
+train_rate = 0.8
+
+
 def train():
     model = L.Classifier(net.MyChain())
     optimizer = optimizers.SGD()
     optimizer.setup(model)
 
     (data, target) = animeface.load_dataset()
-    N = int(len(data) * 0.8)
+    N = int(len(data) * train_rate)
     N_test = len(data) - N
-    batchsize = 100
     
     x_train, x_test = np.split(data, [N])
     y_train, y_test = np.split(target, [N])
     
-    for epoch in range(20):
+    for epoch in range(n_epoch):
         print "epoch {0}".format(epoch)
         
         indexes = np.random.permutation(N)

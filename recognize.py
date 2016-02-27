@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import os
+
 import numpy as np
 import chainer
 from chainer import cuda, Function, gradient_check, Variable, \
@@ -7,41 +9,33 @@ from chainer import cuda, Function, gradient_check, Variable, \
 from chainer import Link, Chain, ChainList
 import chainer.functions as F
 import chainer.links as L
+import cv2 as cv
 
 import animeface
 import net
 
-def recognize():
+
+def recognize(image):
     model = L.Classifier(net.MyChain())
-    # optimizer = optimizers.SGD()
-    # optimizer.setup(model)
-
-    (data, target) = animeface.load_dataset()
-
     serializers.load_npz("animeface.model", model)
-    # serializers.load_npz("animeface.state", optimizer)
+    
+    x = np.array([image], np.float32)[[0]]
+    x = Variable(x)
+    y = model.predictor(x)
+    ys = list(y.data[0])
+    class_id = ys.index(max(ys))
+    
+    tag2id = animeface.get_class_id_table()
+    id2tag = {tag2id[tag]:tag for tag in tag2id}
 
-    total = {}
-    ok = {}
-    for i in range(176):
-        total[i] = 0
-        ok[i] = 0
+    print id2tag[class_id]
 
-    for i in range(len(data)):
-        x = Variable(data[[i]])
-        y = model.predictor(x)
-        yy = list(y.data[0])
-        actual = yy.index(max(yy))
-        expected = target[i]
-        print "{0} is expected, but actual {1}".format(expected, actual)
-        total[expected] += 1
-        if expected == actual:
-            ok[expected] += 1
-
-    id2tag = animeface.get_tag_dir()
-
-    for i in range(176):
-        print id2tag[i], float(ok[i]) / float(total[i])
 
 if __name__ == "__main__":
-    recognize()
+    if len(os.sys.argv)<2:
+        print "Usage: python recognize.py path_to_image"
+        sys.exit()
+    
+    filepath = os.sys.argv[1]
+    image = animeface.load_image(filepath)
+    recognize(image)

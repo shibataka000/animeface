@@ -8,33 +8,44 @@ import cv2 as cv
 
 
 DATASET_DIR = "./animeface-character-dataset/thumb"
+IMAGE_SIZE = 32
+N_CLASS = 203
 
-def unique(l):
-    return list(set(l))
+
+def load_image(path):
+    image = cv.imread(path)
+    image = cv.resize(image, (IMAGE_SIZE, IMAGE_SIZE))
+    image = image.transpose(2, 0, 1)
+    image = image / 255
+    return image
+
 
 def load_dataset():
-    dataset = []
+    data = []
+    target = []
+    tag2id = get_class_id_table()
+
     for dir_name in os.listdir(DATASET_DIR):
-        tag = dir_name[:3]
+        tag = dir_name
+        class_id = tag2id[tag]
         dir_path = os.path.join(DATASET_DIR, dir_name)
+
         for file_name in os.listdir(dir_path):
             if not file_name.endswith(".png"):
                 continue
             file_path = os.path.join(dir_path, file_name)
-            image = cv.imread(file_path)
-            image = cv.resize(image, (32, 32))
-            image = image.transpose(2, 0, 1)
-            image = image / 255
-            dataset.append((tag, image))
+            image = load_image(file_path)
+            data.append(image)
+            target.append(class_id)
 
-    random.shuffle(dataset)
-    
-    tags = unique([x[0] for x in dataset])
-    tag2id = dict(zip(sorted(tags), range(len(tags))))
-    target = np.array([tag2id[x[0]] for x in dataset], np.int32)
-    data = np.array([x[1] for x in dataset], np.float32)
+    data = np.array(data, np.float32)
+    target = np.array(target, np.int32)
+
     return (data, target)
-        
 
-if __name__ == "__main__":
-    load_dataset()
+
+def get_class_id_table():
+    tags = os.listdir(DATASET_DIR)
+    tags = sorted(tags)
+    tag2id = {tags[i]:i for i in range(len(tags))}
+    return tag2id
