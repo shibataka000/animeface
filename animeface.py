@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import os
-import random
 
 import numpy as np
 import cv2 as cv
@@ -36,11 +35,7 @@ def load_dataset():
             image = load_image(file_path)
             dataset.append((image, class_id))
 
-    random.shuffle(dataset)
-    data = np.array([x[0] for x in dataset], np.float32)
-    target = np.array([x[1] for x in dataset], np.int32)
-
-    return (data, target)
+    return dataset
 
 
 def get_class_id_table():

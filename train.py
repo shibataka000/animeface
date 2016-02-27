@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import random
+
 import numpy as np
 import chainer
 from chainer import cuda, Function, gradient_check, Variable, \
@@ -22,15 +24,19 @@ def train():
     optimizer = optimizers.SGD()
     optimizer.setup(model)
 
-    (data, target) = animeface.load_dataset()
-    N = int(len(data) * train_rate)
-    N_test = len(data) - N
-
-    x_train, x_test = np.split(data, [N])
-    y_train, y_test = np.split(target, [N])
+    dataset = animeface.load_dataset()
+    N = int(len(dataset) * train_rate)
+    N_test = len(dataset) - N
 
     for epoch in range(n_epoch):
         print "epoch {0}".format(epoch)
+
+        random.shuffle(dataset)
+        data = np.array([x[0] for x in dataset], np.float32)
+        target = np.array([x[1] for x in dataset], np.int32)
+
+        x_train, x_test = np.split(data, [N])
+        y_train, y_test = np.split(target, [N])
 
         indexes = np.random.permutation(N)
         sum_loss, sum_accuracy = 0, 0
