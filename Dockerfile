@@ -10,7 +10,3 @@ RUN pip install chainer
 RUN apt-get install libopencv-dev python-opencv unzip -y
 RUN mkdir /animeface
 COPY . /animeface/
-
-WORKDIR /animeface
-
-CMD ["sh", "train.sh"]

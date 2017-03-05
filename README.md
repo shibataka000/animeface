@@ -7,34 +7,33 @@ We can training and recognize anime character face.
 We use [animeface-character-dataset](http://www.nurs.or.jp/~nagadomi/animeface-character-dataset/) for training.
 I refered [深層学習でアニメ顔を分類する](http://qiita.com/hogefugabar/items/312707a09d29632e7288) when I make these program.
 
-## Demo
-
 ## Usage
 
 ### Training
-Build Dockerfile.
+Run command in container.
 
 ```
-docker build -t <image_name> .
+./train.sh
 ```
 
-Run training.
-
-```
-docker run <image_name>
-```
-
-Then `/animeface/animeface.model` will be created in container.
+Then `animeface.model` will be created in container.
 
 ### Recognition
 Run command in container.
 
 ```
-python recognize.py <path_to_image_file>
+./recognize.sh <path_to_image_file>
 ```
 
 `animeface.model` is necessary to recognize.
 Recognized image must be in container.
+
+## Install
+Build Dockerfile.
+
+```
+docker build -t <image_name> .
+```
 
 ## Author
 
